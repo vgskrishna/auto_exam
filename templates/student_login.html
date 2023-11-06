@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Login</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        label {
+            font-size: 18px;
+        }
+
+        input[type="text"] {
+            width: 60%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<!-- <body>
+    <div class="topnav">
+        <a  href="/">Home</a>
+        <a href="/login">Login</a>
+        <a class="active" href="/student_login">Student Login</a>
+        <a href="/faculty_login">Faculty Login</a>
+        <a href="/contact">Contact</a>
+        <a href="/About">About</a>
+    </div>
+
+    <div class="container">
+        <h2>Student Login</h2>
+        <form method="POST" action="/student-login">
+            <label for="rollNumber">Enter Roll Number:</label>
+            <input type="text" id="rollNumber" name="rollNumber" required>
+            <br><br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+</body>
+</html> -->
+
+<body>
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a class="active" href="/student_login">Student Login</a>
+        <a href="/faculty_login">Faculty Login</a>
+        <a href="/contact">Contact</a>
+        <a href="/About">About</a>
+    </div>
+
+    <div class="container">
+        <h2 id="heading">Student Login</h2>
+        <!-- method="POST" action="/student_login" -->
+        <form id="form" method="POST" action="/student_login" onsubmit="return studentLogin()">
+            <label for="rollNumber">Enter Roll Number:</label>
+            <input type="text" id="rollNumber" name="rollNumber" required>
+            <br><br>
+            <input type="submit" value="Login">
+        </form>
+        <div id="allocation-result"></div>
+
+
+    </div>
+
+    <script>
+
+        function studentLogin() {
+            const rollNumber = document.getElementById('rollNumber').value; // Get the student's roll number
+            const allocationResult = document.getElementById('allocation-result'); // Get the result div
+            const heading = document.getElementById("heading")
+            let result = ''; // Initialize the result string
+
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    const data = JSON.parse(localStorage[key]); // Parse the data as JSON
+                    const { it_start, it_end, ec_start, ec_end, el_start, el_end } = data;
+
+                    // Check if the student's roll number falls within any of the ranges
+                    if (rollNumber >= it_start && rollNumber <= it_end) {
+                        result = `Student with roll number ${rollNumber} belongs to ${key} `;
+                    } else if (rollNumber >= ec_start && rollNumber <= ec_end) {
+                        result = `Student with roll number ${rollNumber} belongs to ${key}`;
+                    } else if (rollNumber >= el_start && rollNumber <= el_end) {
+                        result = `Student with roll number ${rollNumber} belongs to ${key} `;
+                    } else {
+                        result = `You are not allocated to any room `;
+                    }
+                }
+            }
+            form.style.display = "none"
+            heading.style.display = "none"
+            // Set the result in the allocation-result div
+            allocationResult.textContent = result;
+
+
+            // Return false to prevent the form's default submission action
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>
